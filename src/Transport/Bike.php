@@ -8,6 +8,7 @@ use CommutingAllowance\AllowanceCalculator\EncouragingAllowanceCalculator;
 class Bike implements TransportInterface {
 
 	private const ALLOWANCE_PER_KM = 0.5;
+	private const NAME = 'Bike';
 
 	/** @var EncouragingAllowanceCalculator $allowanceCalculator */
 	private $allowanceCalculator;
@@ -22,6 +23,10 @@ class Bike implements TransportInterface {
 
 	public function calculateDayAllowance(float $kilometers): float {
 		return 2 * $this->calculateOneWayAllowance($kilometers);
+	}
+
+	public function getName(): string {
+		return self::NAME;
 	}
 
 }

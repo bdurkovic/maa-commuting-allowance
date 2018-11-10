@@ -8,6 +8,7 @@ use CommutingAllowance\AllowanceCalculator\CommonAllowanceCalculator;
 class Bus implements TransportInterface {
 
 	private const ALLOWANCE_PER_KM = 0.25;
+	private const NAME = 'Bus';
 
 	/** @var CommonAllowanceCalculator $allowanceCalculator */
 	private $allowanceCalculator;
@@ -23,5 +24,10 @@ class Bus implements TransportInterface {
 	public function calculateDayAllowance(float $kilometers): float {
 		return 2 * $this->calculateOneWayAllowance($kilometers);
 	}
+
+	public function getName(): string {
+		return self::NAME;
+	}
+
 
 }
