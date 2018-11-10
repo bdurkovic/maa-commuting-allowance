@@ -1,0 +1,11 @@
+{
+    "name": "bdurkovic/maa-commuting-allowance",
+    "description": "Commuting allowance calculator",
+    "type": "project",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "CommutingAllowance\\": "src/"
+        }
+    }
+}
