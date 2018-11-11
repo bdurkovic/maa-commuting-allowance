@@ -56,7 +56,7 @@ $input = [
 ];
 
 /** @var Report $report */
-$report = new Report('test.csv');
+$report = new Report($appConfiguration['output_file']['name'].'.csv');
 
 try {
 
