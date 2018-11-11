@@ -11,7 +11,7 @@ class Report {
 	private $reportLines;
 
 	public function __construct(string $filename) {
-		$this->filename = $filename;
+		$this->filename    = $filename;
 		$this->reportLines = [];
 	}
 
@@ -19,6 +19,12 @@ class Report {
 		$this->reportLines[] = $reportLine;
 	}
 
+	/**
+	 * @param $month
+	 * @param $year
+	 * @return string
+	 * @throws \Exception
+	 */
 	public function getPaymentDate($month, $year): string {
 		$thisMonth = \DateTime::createFromFormat('j-n-Y', '1-'.$month.'-'.$year);
 		return $thisMonth

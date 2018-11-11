@@ -17,10 +17,10 @@ class TransportationMethodFactory {
 	 * @return TransportInterface
 	 */
 	public static function createFromString(string $transportationMethod, array $appConfiguration): TransportInterface {
-		$transportationMethod = __NAMESPACE__ . '\\' . $transportationMethod;
+		$transportationMethod = __NAMESPACE__.'\\'.$transportationMethod;
 		if(!class_exists($transportationMethod)) {
 			throw new \InvalidArgumentException(
-				'Transportation method ' . $transportationMethod . ' is not supported.'
+				'Transportation method '.$transportationMethod.' is not supported.'
 			);
 		}
 

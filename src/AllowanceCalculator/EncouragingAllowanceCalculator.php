@@ -21,9 +21,9 @@ class EncouragingAllowanceCalculator implements AllowanceCalculatorInterface {
 		float $allowanceMultiplier
 	) {
 		$this->baseKilometerCompensation = $baseKilometerCompensation;
-		$this->beginEncouragedDistance = $beginEncouragedDistance;
-		$this->endEncouragedDistance = $endEncouragedDistance;
-		$this->allowanceMultiplier = $allowanceMultiplier;
+		$this->beginEncouragedDistance   = $beginEncouragedDistance;
+		$this->endEncouragedDistance     = $endEncouragedDistance;
+		$this->allowanceMultiplier       = $allowanceMultiplier;
 	}
 
 	/**
@@ -48,10 +48,10 @@ class EncouragingAllowanceCalculator implements AllowanceCalculatorInterface {
 	 * @return float
 	 */
 	private function getEncouragedKilometers(float $kilometers): float {
-		if ($kilometers <= $this->beginEncouragedDistance) {
+		if($kilometers <= $this->beginEncouragedDistance) {
 			// distance less than the encouraged one, no special encouraging
 			return 0.0;
-		} elseif ($kilometers <= $this->endEncouragedDistance) {
+		} elseif($kilometers <= $this->endEncouragedDistance) {
 			// the kilometers between the start and the end of the encouraged distance
 			return $kilometers - $this->beginEncouragedDistance;
 		} else {

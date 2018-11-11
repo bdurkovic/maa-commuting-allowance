@@ -29,10 +29,10 @@ class Employee {
 			throw new \InvalidArgumentException('Bad employee input');
 		}
 
-		$this->name = $name;
+		$this->name     = $name;
 		$this->distance = $distance;
 		$this->workdays = $workdays;
-		$this->vehicle = $vehicle;
+		$this->vehicle  = $vehicle;
 		$this->getOfficePresenceWeekdays();
 	}
 
@@ -77,7 +77,7 @@ class Employee {
 		// for each day it is checked if its day of the week matches the weekdays the employee is in the office
 		// if so, the return value is incremented by one
 		// this is done for as long as the month of the day is still the given month
-		$currentDay   = \DateTime::createFromFormat('j-n-Y', '1-' . $month . '-' . $year);
+		$currentDay = \DateTime::createFromFormat('j-n-Y', '1-'.$month.'-'.$year);
 		while($currentDay->format('n') === (string)$month) {
 			if(\in_array($currentDay->format('D'), $this->officePresenceWeekdays, true)) {
 				$presenceDays++;
