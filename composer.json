@@ -1,6 +1,12 @@
 {
     "name": "bdurkovic/maa-commuting-allowance",
     "description": "Commuting allowance calculator",
+	"authors": [
+	  {
+		"name": "Bojan Đurković",
+		"email": "djurkovic@gmail.com"
+	  }
+	],
     "type": "project",
     "require": {},
     "autoload": {

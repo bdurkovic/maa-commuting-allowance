@@ -2,72 +2,111 @@
 declare(strict_types=1);
 
 use CommutingAllowance\Transport\TransportationMethodFactory;
+use CommutingAllowance\Report\Report;
+use CommutingAllowance\Report\ReportLine;
+use CommutingAllowance\Employee;
 
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+require_once dirname(__DIR__).'/vendor/autoload.php';
+
+$settings = parse_ini_file(dirname(__DIR__).'config.ini');
 
 $input = [
 	[
-		'employee' => 'Paul',
+		'employee'  => 'Paul',
 		'transport' => 'Car',
-		'distance' => 60,
-		'workdays' => 5
+		'distance'  => 60,
+		'workdays'  => 5
 	],
 	[
-		'employee' => 'Martin',
+		'employee'  => 'Martin',
 		'transport' => 'Bus',
-		'distance' => 8,
-		'workdays' => 4
+		'distance'  => 8,
+		'workdays'  => 4
 	],
 	[
-		'employee' => 'Jeroen',
+		'employee'  => 'Jeroen',
 		'transport' => 'Bike',
-		'distance' => 9,
-		'workdays' => 5
+		'distance'  => 9,
+		'workdays'  => 5
 	],
 	[
-		'employee' => 'Tineke',
+		'employee'  => 'Tineke',
 		'transport' => 'Bike',
-		'distance' => 4,
-		'workdays' => 3
+		'distance'  => 4,
+		'workdays'  => 3
 	],
 	[
-		'employee' => 'Arnout',
+		'employee'  => 'Arnout',
 		'transport' => 'Train',
-		'distance' => 23,
-		'workdays' => 5
+		'distance'  => 23,
+		'workdays'  => 5
 	],
 	[
-		'employee' => 'Matthijs',
+		'employee'  => 'Matthijs',
 		'transport' => 'Bike',
-		'distance' => 11,
-		'workdays' => 4.5
+		'distance'  => 11,
+		'workdays'  => 4.5
 	],
 	[
-		'employee' => 'Rens',
+		'employee'  => 'Rens',
 		'transport' => 'Car',
-		'distance' => 12,
-		'workdays' => 5
+		'distance'  => 12,
+		'workdays'  => 5
 	]
 ];
 
-$report = new CommutingAllowance\Report\Report();
+/** @var Report $report */
+$report = new Report('test.csv');
 
-foreach($input as $employeeArr) {
-	$employee = new \CommutingAllowance\Employee(
-		$employeeArr['employee'],
-		$employeeArr['distance'],
-		$employeeArr['workdays'],
-		TransportationMethodFactory::createFromString($employeeArr['transport'])
-	);
+try {
+
+	/** @var Employee[] $employees */
+	$employees = [];
+
+	foreach($input as $employeeArr) {
+		$employees[] = new Employee(
+			$employeeArr['employee'],
+			$employeeArr['distance'],
+			$employeeArr['workdays'],
+			TransportationMethodFactory::createFromString($employeeArr['transport'])
+		);
+	}
 
 	for($month = 1; $month <= 12; $month++) {
-		$csvRow =
-			$employee->getName().','
-			.$employee->getVehicle()->getName().','
-			.$employee->getTraveledDistanceByMonth($month, 2018).'km,'
-			.$report->getCurrencyFormat($employee->getMonthlyAllowance($month, 2018)).','
-			.$report->getPaymentDate($month, 2018);
+		$report->addLine(
+			(new ReportLine())
+				->addDataCell('Employee')
+				->addDataCell('Transport')
+				->addDataCell('Traveled distance')
+				->addDataCell(
+					'Compensation for '
+					.DateTime::createFromFormat('!m', (string)$month)->format('F')
+					.' 2018'
+				)
+				->addDataCell('Payment Date')
+				->endLine()
+		);
 
-		echo $csvRow . "\n";
+		foreach($employees as $employee) {
+			$report->addLine(
+				(new ReportLine())
+					->addDataCell($employee->getName())
+					->addDataCell($employee->getVehicle()->getName())
+					->addDataCell($employee->getTraveledDistanceByMonth($month, 2018).'km')
+					->addDataCell($report->getCurrencyFormat($employee->getMonthlyAllowance($month, 2018)))
+					->addDataCell($report->getPaymentDate($month, 2018))
+					->endLine()
+			);
+		}
+
 	}
+} catch(Exception $e) {
+	$report->addLine(
+		(new ReportLine())
+			->addDataCell('An error has occurred: '.$e->getMessage())
+			->endLine()
+	);
 }
+
+$report->generateOutputFile();
+
