@@ -7,14 +7,19 @@ use CommutingAllowance\AllowanceCalculator\CommonAllowanceCalculator;
 
 class Bus implements TransportInterface {
 
-	private const ALLOWANCE_PER_KM = 0.25;
 	private const NAME = 'Bus';
 
 	/** @var CommonAllowanceCalculator $allowanceCalculator */
 	private $allowanceCalculator;
 
-	public function __construct() {
-		$this->allowanceCalculator = new CommonAllowanceCalculator(self::ALLOWANCE_PER_KM);
+	/**
+	 * Bus constructor.
+	 * @param array $appConfiguration application configuration array from config.ini
+	 */
+	public function __construct(array $appConfiguration) {
+		$this->allowanceCalculator = new CommonAllowanceCalculator(
+			(float)$appConfiguration['compensation_per_km'][self::NAME]
+		);
 	}
 
 	public function calculateOneWayAllowance(float $kilometers): float {

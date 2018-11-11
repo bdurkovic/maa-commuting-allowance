@@ -7,14 +7,22 @@ use CommutingAllowance\AllowanceCalculator\EncouragingAllowanceCalculator;
 
 class Bike implements TransportInterface {
 
-	private const ALLOWANCE_PER_KM = 0.5;
 	private const NAME = 'Bike';
 
 	/** @var EncouragingAllowanceCalculator $allowanceCalculator */
 	private $allowanceCalculator;
 
-	public function __construct() {
-		$this->allowanceCalculator = new EncouragingAllowanceCalculator(self::ALLOWANCE_PER_KM);
+	/**
+	 * Bike constructor.
+	 * @param array $appConfiguration application configuration array from config.ini
+	 */
+	public function __construct(array $appConfiguration) {
+		$this->allowanceCalculator = new EncouragingAllowanceCalculator(
+			(float)$appConfiguration['compensation_per_km'][self::NAME],
+			(float)$appConfiguration['encouraged_distance']['begin'],
+			(float)$appConfiguration['encouraged_distance']['end'],
+			(float)$appConfiguration['encouraged_distance']['multiplier']
+		);
 	}
 
 	public function calculateOneWayAllowance(float $kilometers): float {

@@ -5,15 +5,25 @@ namespace CommutingAllowance\AllowanceCalculator;
 
 class EncouragingAllowanceCalculator implements AllowanceCalculatorInterface {
 
-	private const BEGIN_ENCOURAGED_DISTANCE = 5.0;
-	private const END_ENCOURAGED_DISTANCE = 10.0;
-	private const ENCOURAGED_KILOMETERS_MULTIPLIER = 2.0;
-
 	/** @var float $baseKilometerCompensation */
 	private $baseKilometerCompensation;
+	/** @var float $beginEncouragedDistance */
+	private $beginEncouragedDistance;
+	/** @var float $endEncouragedDistance */
+	private $endEncouragedDistance;
+	/** @var float $allowanceMultiplier */
+	private $allowanceMultiplier;
 
-	public function __construct(float $baseKilometerCompensation) {
+	public function __construct(
+		float $baseKilometerCompensation,
+		float $beginEncouragedDistance,
+		float $endEncouragedDistance,
+		float $allowanceMultiplier
+	) {
 		$this->baseKilometerCompensation = $baseKilometerCompensation;
+		$this->beginEncouragedDistance = $beginEncouragedDistance;
+		$this->endEncouragedDistance = $endEncouragedDistance;
+		$this->allowanceMultiplier = $allowanceMultiplier;
 	}
 
 	/**
@@ -25,7 +35,7 @@ class EncouragingAllowanceCalculator implements AllowanceCalculatorInterface {
 	public function getAllowance(float $kilometers): float {
 		return
 			(
-				self::ENCOURAGED_KILOMETERS_MULTIPLIER * $this->getEncouragedKilometers($kilometers)
+				$this->allowanceMultiplier * $this->getEncouragedKilometers($kilometers)
 				+ $this->getCommonKilometers($kilometers)
 			)
 			* $this->baseKilometerCompensation;
@@ -38,15 +48,15 @@ class EncouragingAllowanceCalculator implements AllowanceCalculatorInterface {
 	 * @return float
 	 */
 	private function getEncouragedKilometers(float $kilometers): float {
-		if ($kilometers <= self::BEGIN_ENCOURAGED_DISTANCE) {
+		if ($kilometers <= $this->beginEncouragedDistance) {
 			// distance less than the encouraged one, no special encouraging
 			return 0.0;
-		} elseif ($kilometers <= self::END_ENCOURAGED_DISTANCE) {
+		} elseif ($kilometers <= $this->endEncouragedDistance) {
 			// the kilometers between the start and the end of the encouraged distance
-			return $kilometers - self::BEGIN_ENCOURAGED_DISTANCE;
+			return $kilometers - $this->beginEncouragedDistance;
 		} else {
 			// all the specially encouraged kilometers are ridden
-			return self::END_ENCOURAGED_DISTANCE - self::BEGIN_ENCOURAGED_DISTANCE;
+			return $this->endEncouragedDistance - $this->beginEncouragedDistance;
 		}
 	}
 

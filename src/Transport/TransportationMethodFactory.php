@@ -13,9 +13,10 @@ class TransportationMethodFactory {
 	 * Instantiates $transportationMethod
 	 *
 	 * @param string $transportationMethod
+	 * @param array $appConfiguration application configuration array from config.ini
 	 * @return TransportInterface
 	 */
-	public static function createFromString(string $transportationMethod): TransportInterface {
+	public static function createFromString(string $transportationMethod, array $appConfiguration): TransportInterface {
 		$transportationMethod = __NAMESPACE__ . '\\' . $transportationMethod;
 		if(!class_exists($transportationMethod)) {
 			throw new \InvalidArgumentException(
@@ -23,7 +24,7 @@ class TransportationMethodFactory {
 			);
 		}
 
-		return new $transportationMethod();
+		return new $transportationMethod($appConfiguration);
 	}
 
 }

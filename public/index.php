@@ -8,7 +8,7 @@ use CommutingAllowance\Employee;
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
-$settings = parse_ini_file(dirname(__DIR__).'config.ini');
+$appConfiguration = parse_ini_file(dirname(__DIR__).'/config.ini', true);
 
 $input = [
 	[
@@ -68,7 +68,7 @@ try {
 			$employeeArr['employee'],
 			$employeeArr['distance'],
 			$employeeArr['workdays'],
-			TransportationMethodFactory::createFromString($employeeArr['transport'])
+			TransportationMethodFactory::createFromString($employeeArr['transport'], $appConfiguration)
 		);
 	}
 

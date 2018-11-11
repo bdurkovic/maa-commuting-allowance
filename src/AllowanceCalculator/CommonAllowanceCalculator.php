@@ -15,6 +15,7 @@ class CommonAllowanceCalculator implements AllowanceCalculatorInterface {
 	/**
 	 * return euro amount for allowance
 	 *
+	 * @param float $kilometers
 	 * @return float
 	 */
 	public function getAllowance(float $kilometers): float {
