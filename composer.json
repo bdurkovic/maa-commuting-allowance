@@ -13,5 +13,8 @@
         "psr-4": {
             "CommutingAllowance\\": "src/"
         }
+    },
+    "require-dev": {
+        "codeception/codeception": "^2.5"
     }
 }
