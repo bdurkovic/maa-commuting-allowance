@@ -25,6 +25,10 @@ class Employee {
 	private $officePresenceWeekdays;
 
 	public function __construct(string $name, int $distance, float $workdays, TransportInterface $vehicle) {
+		if(empty($name) || $distance < 0 || $workdays < 1 || $workdays > \count(self::WORKING_DAYS_ENUM)) {
+			throw new \InvalidArgumentException('Bad employee input');
+		}
+
 		$this->name = $name;
 		$this->distance = $distance;
 		$this->workdays = $workdays;
